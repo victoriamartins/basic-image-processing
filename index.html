@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Transformações Gráficas</title>
+        <link rel="stylesheet" href="estilo.css" />
+    </head>
+    <body>
+        <nav>
+            <button id="reset">Reset</button>
+            <button id="btnRed">Canal R</button>
+            <button id="btnGreen">Canal G</button>
+            <button id="btnBlue">Canal B</button>
+            <button id="btnGrey">Cinzas</button>
+            <button id="btnLimiar">Limiarização</button>
+            <button id="btnMedia">Média</button>
+            <button id="btnMediana">Mediana</button>
+            <button id="btnGausiano">Filtro Gausiano</button>
+            <button id="btnBrilho">Brilho</button>
+            <button id="btnContraste">Contraste</button>
+            <button id="btnHorizontal">Flip Horizontal</button>
+            <button id="btnVertical">Flip Vertiacal</button>
+            <button id="btn90graus">Girar 90 graus</button>
+        </nav>
+
+        <section id="imgSection">
+            <div>
+                <img src="assets/foto.jpg" id="srcImg" />
+            </div>
+            <div>
+                <canvas id="tagImg"></canvas>
+            </div>
+        </section>
+
+        <script src="main.js"></script>
+    </body>
+</html>
