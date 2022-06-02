@@ -85,6 +85,42 @@ var limiarizar = function () {
     context.putImageData(img.imageData, 0, 0)
 }
 
+var media = function () {
+    startCanvas()
+
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let img = new MatrixImage(imageData)
+
+    for (var i = 1; i < img.width - 1; i++) {
+        for (var j = 1; j < img.height - 1; j++) {
+            var target = img.getPixel(i, j)
+            p = [
+                img.getPixel(i - 1, j - 1),
+                img.getPixel(i, j - 1),
+                img.getPixel(i + 1, j - 1),
+                img.getPixel(i - 1, j),
+                img.getPixel(i + 1, j),
+                img.getPixel(i - 1, j + 1),
+                img.getPixel(i, j + 1),
+                img.getPixel(i + 1, j + 1)
+            ]
+
+            somaR = target.red
+            somaG = target.green
+            somaB = target.blue
+
+            for (var k = 0; k < 8; k++) {
+                somaR += p[k].red
+                somaG += p[k].green
+                somaB += p[k].blue
+            }
+
+            img.setPixel(i, j, new RGBColor(somaR / 9, somaG / 9, somaB / 9))
+        }
+    }
+    context.putImageData(img.imageData, 0, 0)
+}
+
 class RGBColor {
     constructor(r, g, b) {
         this.red = r
@@ -134,3 +170,4 @@ btnGrey = document
 btnLimiar = document
     .getElementById('btnLimiar')
     .addEventListener('click', limiarizar)
+btnMedia = document.getElementById('btnMedia').addEventListener('click', media)
