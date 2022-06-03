@@ -121,6 +121,35 @@ var media = function () {
     context.putImageData(img.imageData, 0, 0)
 }
 
+var mediana = function () {
+    startCanvas()
+    greyFilter()
+
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let img = new MatrixImage(imageData)
+
+    for (var i = 1; i < img.width - 1; i++) {
+        for (var j = 1; j < img.height - 1; j++) {
+            p = [
+                img.getPixel(i, j).red,
+                img.getPixel(i - 1, j - 1).red,
+                img.getPixel(i, j - 1).red,
+                img.getPixel(i + 1, j - 1).red,
+                img.getPixel(i - 1, j).red,
+                img.getPixel(i + 1, j).red,
+                img.getPixel(i - 1, j + 1).red,
+                img.getPixel(i, j + 1).red,
+                img.getPixel(i + 1, j + 1).red
+            ]
+
+            p.sort()
+
+            img.setPixel(i, j, new RGBColor(p[4], p[4], p[4]))
+        }
+    }
+    context.putImageData(img.imageData, 0, 0)
+}
+
 class RGBColor {
     constructor(r, g, b) {
         this.red = r
@@ -171,3 +200,6 @@ btnLimiar = document
     .getElementById('btnLimiar')
     .addEventListener('click', limiarizar)
 btnMedia = document.getElementById('btnMedia').addEventListener('click', media)
+btnMediana = document
+    .getElementById('btnMediana')
+    .addEventListener('click', mediana)
