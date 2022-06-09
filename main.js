@@ -150,6 +150,92 @@ var mediana = function () {
     context.putImageData(img.imageData, 0, 0)
 }
 
+var brilho = function () {
+    startCanvas()
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let img = new MatrixImage(imageData)
+    const brightness = 1.2
+
+    for (var i = 1; i < img.width; i++) {
+        for (var j = 1; j < img.height; j++) {
+            var pixel = img.getPixel(i, j)
+            newR = pixel.red * brightness
+            newG = pixel.green * brightness
+            newB = pixel.blue * brightness
+            img.setPixel(i, j, new RGBColor(newR, newG, newB))
+        }
+    }
+    context.putImageData(img.imageData, 0, 0)
+}
+
+var contraste = function () {
+    startCanvas()
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let img = new MatrixImage(imageData)
+
+    const fator_contraste = 2
+    const add = 200
+
+    for (var i = 1; i < img.width; i++) {
+        for (var j = 1; j < img.height; j++) {
+            var pixel = img.getPixel(i, j)
+            newR = fator_contraste * (pixel.red - add) + add
+            newG = fator_contraste * (pixel.green - add) + add
+            newB = fator_contraste * (pixel.blue - add) + add
+            img.setPixel(i, j, new RGBColor(newR, newG, newB))
+            img.setPixel(i, j, new RGBColor(newR, newG, newB))
+        }
+    }
+    context.putImageData(img.imageData, 0, 0)
+}
+
+function pesoGaussiano(pixel, peso) {
+    return new RGBColor(pixel.red * peso, pixel.green * peso, pixel.blue * peso)
+}
+
+var gaussiano = function () {
+    startCanvas()
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let img = new MatrixImage(imageData)
+
+    for (var i = 2; i < img.width - 2; i++) {
+        for (var j = 2; j < img.height - 2; j++) {
+            p = [
+                pesoGaussiano(img.getPixel(i, j), 0.1),
+                pesoGaussiano(img.getPixel(i - 1, j - 1), 0.025),
+                pesoGaussiano(img.getPixel(i, j - 1), 0.2),
+                pesoGaussiano(img.getPixel(i + 1, j - 1), 0.025),
+                pesoGaussiano(img.getPixel(i - 1, j), 0.2),
+                pesoGaussiano(img.getPixel(i + 1, j), 0.2),
+                pesoGaussiano(img.getPixel(i - 1, j + 1), 0.025),
+                pesoGaussiano(img.getPixel(i, j + 1), 0.2),
+                pesoGaussiano(img.getPixel(i + 1, j + 1), 0.025),
+                pesoGaussiano(img.getPixel(i, j - 2), 0.1),
+                pesoGaussiano(img.getPixel(i, j + 2), 0.1),
+                pesoGaussiano(img.getPixel(i + 2, j), 0.1),
+                pesoGaussiano(img.getPixel(i - 2, j), 0.1)
+            ]
+
+            somaR = 0
+            somaG = 0
+            somaB = 0
+            for (var k = 0; k < 13; k++) {
+                somaR += p[k].red
+                somaG += p[k].green
+                somaB += p[k].blue
+            }
+
+            img.setPixel(
+                i,
+                j,
+                new RGBColor(somaR / 1.4, somaG / 1.4, somaB / 1.4)
+            )
+        }
+    }
+
+    context.putImageData(img.imageData, 0, 0)
+}
+
 class RGBColor {
     constructor(r, g, b) {
         this.red = r
@@ -203,3 +289,12 @@ btnMedia = document.getElementById('btnMedia').addEventListener('click', media)
 btnMediana = document
     .getElementById('btnMediana')
     .addEventListener('click', mediana)
+btnBrilho = document
+    .getElementById('btnBrilho')
+    .addEventListener('click', brilho)
+btnContraste = document
+    .getElementById('btnContraste')
+    .addEventListener('click', contraste)
+btnGaussiano = document
+    .getElementById('btnGaussiano')
+    .addEventListener('click', gaussiano)
