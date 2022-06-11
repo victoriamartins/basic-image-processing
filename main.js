@@ -236,7 +236,7 @@ var gaussiano = function () {
     context.putImageData(img.imageData, 0, 0)
 }
 
-var flip1 = function () {
+var flipVertical = function () {
     startCanvas()
 
     let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
@@ -253,6 +253,27 @@ var flip1 = function () {
             newImg.setPixel(i, height, srcPixel)
         }
         height--
+    }
+    context.putImageData(newImg.imageData, 0, 0)
+}
+
+var flipHorizontal = function () {
+    startCanvas()
+
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let oldImg = new MatrixImage(imageData)
+    let newImg = new MatrixImage(imageData)
+    let width = canvas.width - 1
+
+    for (var i = 0; i < newImg.width / 2; i++) {
+        for (var j = 0; j < newImg.height; j++) {
+            var srcPixel = oldImg.getPixel(i, j)
+            var tgtPixel = oldImg.getPixel(width, j)
+
+            newImg.setPixel(i, j, tgtPixel)
+            newImg.setPixel(width, j, srcPixel)
+        }
+        width--
     }
     context.putImageData(newImg.imageData, 0, 0)
 }
@@ -321,4 +342,7 @@ btnGaussiano = document
     .addEventListener('click', gaussiano)
 btnHorizontal = document
     .getElementById('btnHorizontal')
-    .addEventListener('click', flip1)
+    .addEventListener('click', flipHorizontal)
+btnVertical = document
+    .getElementById('btnVertical')
+    .addEventListener('click', flipVertical)
