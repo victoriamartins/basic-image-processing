@@ -236,6 +236,27 @@ var gaussiano = function () {
     context.putImageData(img.imageData, 0, 0)
 }
 
+var flip1 = function () {
+    startCanvas()
+
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let oldImg = new MatrixImage(imageData)
+    let newImg = new MatrixImage(imageData)
+    let height = canvas.height - 1
+
+    for (var j = 0; j < newImg.width / 2; j++) {
+        for (var i = 0; i < newImg.height; i++) {
+            var srcPixel = oldImg.getPixel(i, j)
+            var tgtPixel = oldImg.getPixel(i, height)
+
+            newImg.setPixel(i, j, tgtPixel)
+            newImg.setPixel(i, height, srcPixel)
+        }
+        height--
+    }
+    context.putImageData(newImg.imageData, 0, 0)
+}
+
 class RGBColor {
     constructor(r, g, b) {
         this.red = r
@@ -298,3 +319,6 @@ btnContraste = document
 btnGaussiano = document
     .getElementById('btnGaussiano')
     .addEventListener('click', gaussiano)
+btnHorizontal = document
+    .getElementById('btnHorizontal')
+    .addEventListener('click', flip1)
