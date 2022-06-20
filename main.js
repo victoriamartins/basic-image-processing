@@ -278,6 +278,30 @@ var flipHorizontal = function () {
     context.putImageData(newImg.imageData, 0, 0)
 }
 
+flip90 = function () {
+    startCanvas()
+
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height)
+    let oldImg = new MatrixImage(imageData)
+
+    let newImageData = context.getImageData(0, 0, canvas.height, canvas.width)
+    let newImg = new MatrixImage(newImageData)
+
+    var x, y
+    y = 0
+    for (var i = 0; i < oldImg.width; i++) {
+        x = oldImg.height - 1
+        for (var j = 0; j < oldImg.height; j++) {
+            pixel = oldImg.getPixel(x, y)
+            newImg.setPixel(i, j, pixel)
+            x--
+        }
+        y++
+    }
+
+    context.putImageData(newImg.imageData, 0, 0)
+}
+
 class RGBColor {
     constructor(r, g, b) {
         this.red = r
@@ -346,3 +370,6 @@ btnHorizontal = document
 btnVertical = document
     .getElementById('btnVertical')
     .addEventListener('click', flipVertical)
+btn90graus = document
+    .getElementById('btn90graus')
+    .addEventListener('click', flip90)
